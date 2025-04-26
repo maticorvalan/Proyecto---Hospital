@@ -1,0 +1,21 @@
+doctype html
+html(lang="es")
+  head
+    meta(charset="UTF-8")
+    meta(name="viewport", content="width=device-width, initial-scale=1.0")
+    title= title || 'Sistema HIS'
+    //- Enlaza el CSS compilado por Tailwind
+    link(rel="stylesheet", href="/css/styles.css")
+  body.bg-gray-100.text-gray-800
+    //- Aquí podrías incluir partials como un header o navbar
+    //- include ../partials/header
+
+    main.container.mx-auto.p-4
+      //- El contenido específico de cada página se insertará aquí
+      block content
+
+    //- Aquí podrías incluir partials como un footer
+    //- include ../partials/footer
+
+    //- Scripts JS (si los necesitas)
+    //- script(src="/js/main.js")
