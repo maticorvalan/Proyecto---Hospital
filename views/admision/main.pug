@@ -1,0 +1,92 @@
+//- views/admision/formularioAdmision.pug
+extends ../layout
+
+block content
+  .container.mx-auto.min-h-screen 
+    h1.text-3xl.font-semibold.text-gray-800.mb-6= title
+
+    //- Mostrar mensajes de error si existen (si usas connect-flash o pasas 'error' al render)
+    if error
+      .bg-red-100.border-l-4.border-red-500.text-red-700.p-4.mb-6(role="alert")
+        p.font-bold Error
+        p= error
+
+    form(action="/admision/nueva" method="POST" class="bg-white.shadow-md.rounded.px-8.pt-6.pb-8.mb-4 " novalidate)
+
+      //- SECCIÓN DATOS DEL PACIENTE
+      section.mb-8
+        h2.text-xl.font-semibold.text-gray-700.mb-4 Datos del Paciente
+        div(class="grid grid-cols-1 md:grid-cols-2 gap-6")
+          //- DNI
+          div
+            label.block.text-gray-700.text-sm.font-bold.mb-2(for="dni") DNI *
+            input#dni.shadow.appearance-none.border.rounded.w-full.py-2.px-3.text-gray-700.leading-tight(type="text" name="dni" value=paciente ? paciente.dni : '' placeholder="DNI del paciente" required)
+            //- Aquí podrías añadir un botón "Buscar Paciente" con JS para autocompletar si ya existe
+
+          //- Nombre
+          div
+            label.block.text-gray-700.text-sm.font-bold.mb-2(for="nombre") Nombre *
+            input#nombre.shadow.appearance-none.border.rounded.w-full.py-2.px-3.text-gray-700.leading-tight(type="text" name="nombre" value=paciente ? paciente.nombre : '' placeholder="Nombre del paciente" required)
+
+          //- Apellido
+          div
+            label.block.text-gray-700.text-sm.font-bold.mb-2(for="apellido") Apellido *
+            input#apellido.shadow.appearance-none.border.rounded.w-full.py-2.px-3.text-gray-700.leading-tight(type="text" name="apellido" value=paciente ? paciente.apellido : '' placeholder="Apellido del paciente" required)
+
+          //- Fecha de Nacimiento
+          div
+            label.block.text-gray-700.text-sm.font-bold.mb-2(for="fechaNacimiento") Fecha de Nacimiento
+            input#fechaNacimiento.shadow.appearance-none.border.rounded.w-full.py-2.px-3.text-gray-700.leading-tight(type="date" name="fechaNacimiento" value=paciente && paciente.fechaNacimiento ? new Date(paciente.fechaNacimiento).toISOString().split('T')[0] : '')
+
+          //- Dirección
+          div
+            label.block.text-gray-700.text-sm.font-bold.mb-2(for="direccion") Dirección
+            input#direccion.shadow.appearance-none.border.rounded.w-full.py-2.px-3.text-gray-700.leading-tight(type="text" name="direccion" value=paciente ? paciente.direccion : '' placeholder="Dirección")
+
+          //- Teléfono
+          div
+            label.block.text-gray-700.text-sm.font-bold.mb-2(for="telefono") Teléfono
+            input#telefono.shadow.appearance-none.border.rounded.w-full.py-2.px-3.text-gray-700.leading-tight(type="tel" name="telefono" value=paciente ? paciente.telefono : '' placeholder="Número de teléfono")
+          
+          //- Email
+          div
+            label.block.text-gray-700.text-sm.font-bold.mb-2(for="email") Correo Electrónico
+            input#email.shadow.appearance-none.border.rounded.w-full.py-2.px-3.text-gray-700.leading-tight(type="email" name="email" value=paciente ? paciente.email : '' placeholder="correo@ejemplo.com")
+          
+          //- Obra Social
+          div
+            label.block.text-gray-700.text-sm.font-bold.mb-2(for="obraSocial") Obra Social / Seguro Médico
+            input#obraSocial.shadow.appearance-none.border.rounded.w-full.py-2.px-3.text-gray-700.leading-tight(type="text" name="obraSocial" value=paciente ? paciente.obraSocial : '' placeholder="Nombre de la obra social")
+
+          //- Número de Afiliado
+          div
+            label.block.text-gray-700.text-sm.font-bold.mb-2(for="numeroAfiliado") Número de Afiliado
+            input#numeroAfiliado.shadow.appearance-none.border.rounded.w-full.py-2.px-3.text-gray-700.leading-tight(type="text" name="numeroAfiliado" value=paciente ? paciente.numeroAfiliado : '' placeholder="Número de afiliado")
+
+      //- SECCIÓN DATOS DE LA ADMISIÓN
+      section.mb-8
+        h2.text-xl.font-semibold.text-gray-700.mb-4 Datos de la Admisión
+        div(class="grid grid-cols-1 md:grid-cols-2 gap-6")
+          //- Tipo de Admisión
+          div
+            label.block.text-gray-700.text-sm.font-bold.mb-2(for="tipoAdmision") Tipo de Admisión *
+            select#tipoAdmision.shadow.appearance-none.border.rounded.w-full.py-2.px-3.text-gray-700.leading-tight(name="tipoAdmision" required)
+              option(value="" disabled selected=(!paciente || !paciente.tipoAdmision)) Seleccione un tipo
+              each tipo in tiposAdmision
+                option(value=tipo selected=(paciente && paciente.tipoAdmision === tipo))= tipo.charAt(0).toUpperCase() + tipo.slice(1)
+          
+          //- Médico Derivante
+          div
+            label.block.text-gray-700.text-sm.font-bold.mb-2(for="medicoDerivante") Médico Derivante (si aplica)
+            input#medicoDerivante.shadow.appearance-none.border.rounded.w-full.py-2.px-3.text-gray-700.leading-tight(type="text" name="medicoDerivante" value=paciente ? paciente.medicoDerivante : '' placeholder="Nombre del médico")
+
+        //- Motivo de Consulta
+        .mt-6
+          label.block.text-gray-700.text-sm.font-bold.mb-2(for="motivoConsulta") Motivo de Consulta / Síntomas Principales
+          textarea#motivoConsulta.shadow.appearance-none.border.rounded.w-full.py-2.px-3.text-gray-700.leading-tight(name="motivoConsulta" rows="4" placeholder="Describa el motivo principal de la internación...")= paciente ? paciente.motivoConsulta : ''
+
+      //- Botón de Envío
+      .flex.items-center.justify-end.mt-6
+        button(class="bg-blue-500 hover:bg-blue-700 text-white font-bold py-2 px-4 rounded focus:outline-none focus:shadow-outline" type="submit")
+          | Registrar Admisión
+    

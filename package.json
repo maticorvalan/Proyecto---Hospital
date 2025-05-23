@@ -4,9 +4,9 @@
   "main": "app.js",
   "type": "module",
   "scripts": {
-    "start": "node server.js",
-    "build:css": "postcss dist/styles.css -o public/css/styles.css",
-    "dev:server": "nodemon server.js",
+    "start": "node app.js",
+    "build:css": "postcss dist/styles.css -o public/css/styles.css --watch",
+    "dev:server": "nodemon app.js",
     "dev": "concurrently \"npm:dev:server\" \"npm:build:css\""
   },
   "keywords": [],
@@ -17,10 +17,12 @@
     "@tailwindcss/postcss": "^4.1.4",
     "concurrently": "^9.1.2",
     "express": "^5.1.0",
+    "mysql2": "^3.14.1",
     "npm": "^11.3.0",
     "postcss": "^8.5.3",
     "postcss-cli": "^11.0.1",
     "pug": "^3.0.3",
+    "sequelize": "^6.37.7",
     "tailwindcss": "^4.1.4",
     "uninstall": "^0.0.0"
   },
