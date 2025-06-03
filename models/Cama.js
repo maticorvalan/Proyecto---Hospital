@@ -6,7 +6,7 @@ class Cama extends Model {}
 Cama.init({
 
     numero: {
-        type: DataTypes.INTEGER,
+        type: DataTypes.STRING,
         allowNull: false
     },
     idHabitacion: {

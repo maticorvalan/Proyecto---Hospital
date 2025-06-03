@@ -10,8 +10,8 @@ TipoAdmision.init({
     },
 }, {
     sequelize,
-    modelName: 'MotivoAdmision',
-    tableName: 'motivosadmision',
+    modelName: 'TipoAdmision',
+    tableName: 'tiposadmision',
     timestamps: false
 });
 export default TipoAdmision;

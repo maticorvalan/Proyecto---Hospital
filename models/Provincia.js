@@ -7,14 +7,6 @@ Provincia.init({
         type: DataTypes.STRING,
         allowNull: false
     },
-    codigo: {
-        type: DataTypes.STRING,
-        allowNull: false
-    },
-    idLocalidad: {
-        type: DataTypes.INTEGER,
-        allowNull: false,
-    },
 }, {
     sequelize,
     modelName: 'Provincia',

@@ -15,12 +15,13 @@ import TipoAdmision from './TipoAdmision.js';
 import TipoMutual from './TipoMutual.js';
 import Turno from './Turno.js';
 import Usuario from './Usuario.js';
+import TipoMotivo from './TipoMotivo.js';
 
 
 // Definición de las relaciones entre los modelos
 // Paciente
 Paciente.belongsTo(Genero, { foreignKey: 'idGenero' });
-Paciente.belongsTo(Provincia, { foreignKey: 'idProvincia' });
+Paciente.belongsTo(Provincia, { foreignKey: 'idProvincia', as : 'provincia' });
 Paciente.belongsTo(Mutual, { foreignKey: 'idMutual' });
 Paciente.hasMany(Turno, { foreignKey: 'idPaciente' });
 Paciente.hasMany(Admision, { foreignKey: 'idPaciente' });
@@ -31,6 +32,7 @@ Admision.belongsTo(EstadoAdmision, { foreignKey: 'idEstadoAdmision' });
 Admision.belongsTo(TipoAdmision, { foreignKey: 'idTipoAdmision' });
 Admision.belongsTo(Turno, { foreignKey: 'idTurno' });
 Admision.hasMany(Internacion, { foreignKey: 'idAdmision' });
+Admision.belongsTo(TipoMotivo, { foreignKey: 'idTipoMotivo' });
 // Ala
 Ala.hasMany(Habitacion, { foreignKey: 'idAla' });
 // Cama
@@ -47,17 +49,19 @@ Habitacion.hasMany(Cama, { foreignKey: 'idHabitacion' });
 Internacion.belongsTo(Admision, { foreignKey: 'idAdmision' });
 Internacion.belongsTo(Cama, { foreignKey: 'idCama' });
 // Localidad
-Localidad.hasMany(Provincia, { foreignKey: 'idLocalidad' });
+Localidad.belongsTo(Provincia, { foreignKey: 'idProvincia' });
 // Mutual
 Mutual.hasMany(Paciente, { foreignKey: 'idMutual' });
 Mutual.belongsTo(TipoMutual, { foreignKey: 'idTipoMutual' });
 // Provincia
 Provincia.hasMany(Paciente, { foreignKey: 'idProvincia' });
-Provincia.belongsTo(Localidad, { foreignKey: 'idLocalidad' });
+Provincia.hasMany(Localidad, { foreignKey: 'idProvincia', as: 'Localidades' });
 // RolUsuario
 RolUsuario.hasMany(Usuario, { foreignKey: 'idRolUsuario' });
 // TipoAdmision
 TipoAdmision.hasMany(Admision, { foreignKey: 'idTipoAdmision' });
+// TipoMotivo
+TipoMotivo.hasMany(Admision, { foreignKey: 'idTipoMotivo' });
 // TipoMutual
 TipoMutual.hasMany(Mutual, { foreignKey: 'idTipoMutual' });
 // Turno

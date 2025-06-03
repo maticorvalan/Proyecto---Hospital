@@ -6,7 +6,10 @@ Paciente.init({
     dni: {
         type: DataTypes.STRING,
         allowNull: false,
-        unique: true
+        unique: 'unique_dni',
+        validate: {
+            is: /^\d{7,8}$/ // Validacion para DNI argentino
+        }
     },
     nombre: {
         type: DataTypes.STRING,
@@ -45,13 +48,20 @@ Paciente.init({
     },
     idMutual: {
         type: DataTypes.INTEGER,
-        allowNull: false,
+        allowNull: true
     }
     
 }, {
     sequelize,
     modelName: 'Paciente',
     tableName: 'pacientes',
+    indexes: [
+        {
+            name: 'unique_dni',
+            unique: true,
+            fields: ['dni']
+        }
+    ]
 });
 
 

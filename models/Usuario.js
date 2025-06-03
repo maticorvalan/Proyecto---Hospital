@@ -13,7 +13,7 @@ Usuario.init({
             isEmail: true
         },
         allowNull: false,
-        unique: true
+        unique: 'unique_email'
     },
     password: {
         type: DataTypes.STRING,
@@ -32,5 +32,12 @@ Usuario.init({
     sequelize,
     modelName: 'Usuario',
     tableName: 'usuarios',
+    indexes: [
+        {
+            name: 'unique_email',
+            unique: true,
+            fields: ['email']
+        }
+    ],
 });
 export default Usuario;

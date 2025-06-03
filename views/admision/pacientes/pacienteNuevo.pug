@@ -1,0 +1,151 @@
+extends ../../layout
+
+block content
+  .container.mx-auto.min-h-screen.py-8
+    h1.text-3xl.font-semibold.text-gray-800.mb-6.text-center= title
+
+    if error
+      .bg-red-100.border-l-4.border-red-500.text-red-700.p-4.mb-6.rounded(role="alert")
+        p.font-bold Error
+        p= error
+
+    form(action="/admision/nuevo-paciente" method="POST" class="bg-white shadow-lg rounded-lg px-8 pt-6 pb-8 mb-6 max-w-4xl mx-auto")
+      //- SECCIÓN DATOS DEL PACIENTE
+      section.mb-8
+        h2.text-xl.font-semibold.text-gray-700.mb-4.pb-2.border-b.border-gray-200 Datos del Paciente
+        div(class="grid grid-cols-1 md:grid-cols-2 gap-6")
+          //- DNI
+          .mb-4
+            label.block.text-gray-700.text-sm.font-bold.mb-2(for="dni") DNI *
+            input#dni.shadow.appearance-none.border.rounded.w-full.py-2.px-3.text-gray-700.leading-tight(
+              type="text"
+              name="dni"
+              value=dni
+              placeholder="Ej: 12345678"
+              required
+              class="focus:outline-none focus:ring-2 focus:ring-blue-500"
+            )
+
+          //- Nombre
+          .mb-4
+            label.block.text-gray-700.text-sm.font-bold.mb-2(for="nombre") Nombre *
+            input#nombre.shadow.appearance-none.border.rounded.w-full.py-2.px-3.text-gray-700.leading-tight(
+              type="text"
+              name="nombre"
+              placeholder="Nombre completo"
+              required
+              class="focus:outline-none focus:ring-2 focus:ring-blue-500"
+            )
+
+          //- Apellido
+          .mb-4
+            label.block.text-gray-700.text-sm.font-bold.mb-2(for="apellido") Apellido *
+            input#apellido.shadow.appearance-none.border.rounded.w-full.py-2.px-3.text-gray-700.leading-tight(
+              type="text"
+              name="apellido"
+              placeholder="Apellido completo"
+              required
+              class="focus:outline-none focus:ring-2 focus:ring-blue-500"
+            )
+
+          //- Fecha de Nacimiento
+          .mb-4
+            label.block.text-gray-700.text-sm.font-bold.mb-2(for="fechaNacimiento") Fecha de Nacimiento
+            input#fechaNacimiento.shadow.appearance-none.border.rounded.w-full.py-2.px-3.text-gray-700.leading-tight(
+              type="date"
+              name="fechaNacimiento"
+              class="focus:outline-none focus:ring-2 focus:ring-blue-500"
+            )
+
+          //- Género
+          .mb-4
+            label.block.text-gray-700.text-sm.font-bold.mb-2(for="genero") Género
+            select#genero.shadow.appearance-none.border.rounded.w-full.py-2.px-3.text-gray-700.leading-tight(
+              name="genero"
+              class="focus:outline-none focus:ring-2 focus:ring-blue-500"
+            )
+              option(value="" selected disabled) Seleccionar
+              each genero in generos
+                option(value=genero.id)= genero.nombre
+
+          //- Provincia
+          .mb-4
+            label.block.text-gray-700.text-sm.font-bold.mb-2(for="provincia") Provincia
+            select#provincia.shadow.appearance-none.border.rounded.w-full.py-2.px-3.text-gray-700.leading-tight(
+              name="provincia"
+              class="focus:outline-none focus:ring-2 focus:ring-blue-500"
+            )
+              option(value="" selected disabled) Seleccionar
+              each provincia in provincias
+                option(value=provincia.id)= provincia.nombre     
+
+          //-Localidad
+          .mb-4
+            label.block.text-gray-700.text-sm.font-bold.mb-2(for="localidad") Localidad
+            select#localidad.shadow.appearance-none.border.rounded.w-full.py-2.px-3.text-gray-700.leading-tight(
+              name="localidad"
+              class="focus:outline-none focus:ring-2 focus:ring-blue-500"
+            )
+              option(value="" selected disabled) Seleccionar
+
+          //- Dirección
+          .mb-4
+            label.block.text-gray-700.text-sm.font-bold.mb-2(for="direccion") Dirección
+            input#direccion.shadow.appearance-none.border.rounded.w-full.py-2.px-3.text-gray-700.leading-tight(
+              type="text"
+              name="direccion"
+              placeholder="Dirección completa"
+              class="focus:outline-none focus:ring-2 focus:ring-blue-500"
+            )
+
+          //- Teléfono
+          .mb-4
+            label.block.text-gray-700.text-sm.font-bold.mb-2(for="telefono") Teléfono
+            input#telefono.shadow.appearance-none.border.rounded.w-full.py-2.px-3.text-gray-700.leading-tight(
+              type="tel"
+              name="telefono"
+              placeholder="Número de contacto"
+              class="focus:outline-none focus:ring-2 focus:ring-blue-500"
+            )
+
+          //- Email
+          .mb-4
+            label.block.text-gray-700.text-sm.font-bold.mb-2(for="email") Correo Electrónico
+            input#email.shadow.appearance-none.border.rounded.w-full.py-2.px-3.text-gray-700.leading-tight(
+              type="email"
+              name="email"
+              placeholder="correo@ejemplo.com"
+              class="focus:outline-none focus:ring-2 focus:ring-blue-500"
+            )
+
+          //- Obra Social
+          .mb-4
+            label.block.text-gray-700.text-sm.font-bold.mb-2(for="mutuales") Obra Social
+            select#mutuales.shadow.appearance-none.border.rounded.w-full.py-2.px-3.text-gray-700.leading-tight(
+              name="mutuales"
+              class="focus:outline-none focus:ring-2 focus:ring-blue-500"
+            )
+              option(value="" selected disabled) Seleccione una obra social
+              each mutual in mutuales
+                if mutual.TipoMutual
+                  option(value=mutual.id)= mutual.nombre + ' (' + mutual.TipoMutual.nombre + ')'
+                else
+                  option(value=mutual.id)= mutual.nombre
+
+
+      //- BOTONES
+      .flex.items-center.justify-between.mt-8
+        a(href="/admision" class="inline-flex items-center px-4 py-2 bg-gray-200 text-gray-800 rounded-md hover:bg-gray-300 transition-colors")
+          | Cancelar
+        button(type="submit" class="bg-blue-600 hover:bg-blue-700 text-white font-bold py-2 px-6 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500 focus:ring-opacity-50 transition-colors")
+          | Registrar Admisión
+
+  script.
+    const provinciasData = !{JSON.stringify(provincias)};
+  script(src="/js/script.js")
+  
+
+
+
+
+
