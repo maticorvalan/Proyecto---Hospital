@@ -50,82 +50,99 @@ block content
 
           //- Fecha de Nacimiento
           .mb-4
-            label.block.text-gray-700.text-sm.font-bold.mb-2(for="fechaNacimiento") Fecha de Nacimiento
+            label.block.text-gray-700.text-sm.font-bold.mb-2(for="fechaNacimiento") Fecha de Nacimiento *
             input#fechaNacimiento.shadow.appearance-none.border.rounded.w-full.py-2.px-3.text-gray-700.leading-tight(
               type="date"
               name="fechaNacimiento"
+              required
               class="focus:outline-none focus:ring-2 focus:ring-blue-500"
             )
 
           //- Género
           .mb-4
-            label.block.text-gray-700.text-sm.font-bold.mb-2(for="genero") Género
+            label.block.text-gray-700.text-sm.font-bold.mb-2(for="genero") Género *
             select#genero.shadow.appearance-none.border.rounded.w-full.py-2.px-3.text-gray-700.leading-tight(
               name="genero"
+              required
               class="focus:outline-none focus:ring-2 focus:ring-blue-500"
             )
-              option(value="" selected disabled) Seleccionar
+              option(value="" selected disabled) Seleccionar 🡫
               each genero in generos
                 option(value=genero.id)= genero.nombre
 
           //- Provincia
           .mb-4
-            label.block.text-gray-700.text-sm.font-bold.mb-2(for="provincia") Provincia
+            label.block.text-gray-700.text-sm.font-bold.mb-2(for="provincia") Provincia *
             select#provincia.shadow.appearance-none.border.rounded.w-full.py-2.px-3.text-gray-700.leading-tight(
               name="provincia"
+              required
               class="focus:outline-none focus:ring-2 focus:ring-blue-500"
             )
-              option(value="" selected disabled) Seleccionar
+              option(value="" selected disabled) Seleccionar 🡫
               each provincia in provincias
                 option(value=provincia.id)= provincia.nombre     
 
           //-Localidad
           .mb-4
-            label.block.text-gray-700.text-sm.font-bold.mb-2(for="localidad") Localidad
+            label.block.text-gray-700.text-sm.font-bold.mb-2(for="localidad") Localidad *
             select#localidad.shadow.appearance-none.border.rounded.w-full.py-2.px-3.text-gray-700.leading-tight(
               name="localidad"
+              required
               class="focus:outline-none focus:ring-2 focus:ring-blue-500"
             )
-              option(value="" selected disabled) Seleccionar
+              option(value="" selected disabled) Seleccionar 🡫
 
           //- Dirección
           .mb-4
-            label.block.text-gray-700.text-sm.font-bold.mb-2(for="direccion") Dirección
+            label.block.text-gray-700.text-sm.font-bold.mb-2(for="direccion") Dirección *
             input#direccion.shadow.appearance-none.border.rounded.w-full.py-2.px-3.text-gray-700.leading-tight(
               type="text"
               name="direccion"
+              required
               placeholder="Dirección completa"
               class="focus:outline-none focus:ring-2 focus:ring-blue-500"
             )
 
           //- Teléfono
           .mb-4
-            label.block.text-gray-700.text-sm.font-bold.mb-2(for="telefono") Teléfono
+            label.block.text-gray-700.text-sm.font-bold.mb-2(for="telefono") Teléfono *
             input#telefono.shadow.appearance-none.border.rounded.w-full.py-2.px-3.text-gray-700.leading-tight(
               type="tel"
               name="telefono"
+              required
               placeholder="Número de contacto"
               class="focus:outline-none focus:ring-2 focus:ring-blue-500"
+            )
+            .mb-4
+              label.block.text-gray-700.text-sm.font-bold.mb-2(for="telefonoEmer") Teléfono de Emergencia *
+              input#telefono.shadow.appearance-none.border.rounded.w-full.py-2.px-3.text-gray-700.leading-tight(
+                type="tel"
+                name="telefonoEmer"
+                required
+                placeholder="Número de emergencia"
+                class="focus:outline-none focus:ring-2 focus:ring-blue-500"
             )
 
           //- Email
           .mb-4
-            label.block.text-gray-700.text-sm.font-bold.mb-2(for="email") Correo Electrónico
+            label.block.text-gray-700.text-sm.font-bold.mb-2(for="email") Correo Electrónico *
             input#email.shadow.appearance-none.border.rounded.w-full.py-2.px-3.text-gray-700.leading-tight(
               type="email"
               name="email"
+              required
               placeholder="correo@ejemplo.com"
               class="focus:outline-none focus:ring-2 focus:ring-blue-500"
             )
 
           //- Obra Social
           .mb-4
-            label.block.text-gray-700.text-sm.font-bold.mb-2(for="mutuales") Obra Social
+            label.block.text-gray-700.text-sm.font-bold.mb-2(for="mutuales") Obra Social *
             select#mutuales.shadow.appearance-none.border.rounded.w-full.py-2.px-3.text-gray-700.leading-tight(
               name="mutuales"
+              required
               class="focus:outline-none focus:ring-2 focus:ring-blue-500"
             )
-              option(value="" selected disabled) Seleccione una obra social
+              option(value="" selected disabled) Seleccione una obra social 🡫
               each mutual in mutuales
                 if mutual.TipoMutual
                   option(value=mutual.id)= mutual.nombre + ' (' + mutual.TipoMutual.nombre + ')'
@@ -135,13 +152,23 @@ block content
 
       //- BOTONES
       .flex.items-center.justify-between.mt-8
-        a(href="/admision" class="inline-flex items-center px-4 py-2 bg-gray-200 text-gray-800 rounded-md hover:bg-gray-300 transition-colors")
+        a(href="/admision" class="inline-flex items-center px-4 py-2 bg-gray-200 text-gray-800 rounded-md hover:bg-gray-400 transition-colors")
           | Cancelar
         button(type="submit" class="bg-blue-600 hover:bg-blue-700 text-white font-bold py-2 px-6 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500 focus:ring-opacity-50 transition-colors")
-          | Registrar Admisión
+          | Registrar Paciente
+
 
   script.
     const provinciasData = !{JSON.stringify(provincias)};
+
+  if error_msg
+      script.
+            Swal.fire({
+                icon: 'error',
+                title: '!ERROR!',
+                text: '!#{error_msg}',
+                confirmButtonText: 'Aceptar'
+            })
   script(src="/js/script.js")
   
 

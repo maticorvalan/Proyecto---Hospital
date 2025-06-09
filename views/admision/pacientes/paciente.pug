@@ -2,33 +2,151 @@ extends ../../layout
 
 block content
   .max-w-2xl.mx-auto.p-6.bg-white.rounded-lg.shadow-md.mt-8
+    if success_msg
+      .bg-green-100.border-l-4.border-green-500.text-green-700.p-4.mb-6.rounded(role="alert")
+        p.font-bold= success_msg
+
     h2.text-3xl.font-bold.text-gray-800.mb-6.text-center Datos del Paciente
 
-    .space-y-4
-      .flex.items-center.border-b.border-gray-200.pb-3
-        .w-1x4.font-medium.text-gray-600 Nombre:
-        .w-3x4.text-gray-800 #{pacienteEncontrado.nombre}
-      
-      .flex.items-center.border-b.border-gray-200.pb-3
-        .w-1x4.font-medium.text-gray-600 DNI:
-        .w-3x4.text-gray-800 #{pacienteEncontrado.dni}
-      
-      .flex.items-center.border-b.border-gray-200.pb-3
-        .w-1x4.font-medium.text-gray-600 Dirección:
-        .w-3x4.text-gray-800 #{pacienteEncontrado.direccion}
-      
-      .flex.items-center.border-b.border-gray-200.pb-3
-        .w-1x4.font-medium.text-gray-600 Provincia:
-        .w-3x4.text-gray-800 #{pacienteEncontrado.provincia.nombre}
-      
-      .flex.items-center
-        .w-1x4.font-medium.text-gray-600 Email:
-        .w-3x4.text-blue-600.underline
-          a(href=`mailto:${pacienteEncontrado.email}`) #{pacienteEncontrado.email}
+    form(action="/admision/paciente" method="POST" class="space-y-6 px-8 pt-6 pb-5 mb-2")
+      input(type="hidden" name="id" value=pacienteEncontrado.id)
 
-    //- Opcional: Botón de volver
-    .mt-8.text-center
-      a(href="/pacientes" class="inline-flex items-center px-4 py-2 bg-blue-600 text-white rounded-md hover:bg-blue-700 transition-colors")
-        svg.w-5.h-5.mr-2(xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke="currentColor")
-          path(stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M10 19l-7-7m0 0l7-7m-7 7h18")
-        | Volver a la lista
+      div(class="grid grid-cols-2 gap-6")
+
+        //- DNI (readonly)
+        div
+          label(for="dni" class="text-gray-700 font-medium mb-1") DNI
+          input#dni(
+            type="text"
+            name="dni"
+            value=pacienteEncontrado.dni
+            readonly
+            class="w-full border border-gray-200 bg-gray-100 text-gray-600 rounded px-3 py-2 cursor-not-allowed"
+          )
+
+        div
+          label(for="nombre" class="text-gray-700 font-medium mb-1") Nombre
+          input#nombre(
+            type="text"
+            name="nombre"
+            value=pacienteEncontrado.nombre
+            required
+            class="w-full border border-gray-300 rounded px-3 py-2 focus:outline-none focus:ring-2 focus:ring-blue-500"
+          )
+
+        div
+          label(for="nombre" class="text-gray-700 font-medium mb-1") Apellido
+          input#nombre(
+            type="text"
+            name="nombre"
+            value=pacienteEncontrado.apellido
+            required
+            class="w-full border border-gray-300 rounded px-3 py-2 focus:outline-none focus:ring-2 focus:ring-blue-500"
+          )
+
+        div
+          label(for="fecha" class="text-gray-700 font-medium mb-1") Fecha de Nacimiento
+          input#nombre(
+            type="date"
+            name="fecha"
+            value=pacienteEncontrado.fecha_nacimiento
+            required
+            class="w-full border border-gray-300 rounded px-3 py-2 focus:outline-none focus:ring-2 focus:ring-blue-500"
+          )
+
+        div
+          label(for="genero" class="text-gray-700 font-medium mb-1") Genero
+          select#genero(
+            name="genero"
+            class="w-full border border-gray-300 rounded px-3 py-2 focus:outline-none focus:ring-2 focus:ring-blue-500"
+          )
+            option(value=pacienteEncontrado.Genero.id selected hidden)= pacienteEncontrado.Genero.nombre
+            each genero in generos
+                option(value=genero.id)= genero.nombre
+
+        
+        div
+          label(for="provincia" class="text-gray-700 font-medium mb-1") Provincia
+          select#provincia(
+            name="provincia"
+            class="w-full border border-gray-300 rounded px-3 py-2 focus:outline-none focus:ring-2 focus:ring-blue-500"
+          )
+            option(value=pacienteEncontrado.provincia.id selected hidden)= pacienteEncontrado.provincia.nombre
+              each provincia in provincias
+                option(value=provincia.id)= provincia.nombre
+        div
+          label(for="localidad" class="text-gray-700 font-medium mb-1") Localidad
+          select#localidad(
+            name="localidad"
+            class="w-full border border-gray-300 rounded px-3 py-2 focus:outline-none focus:ring-2 focus:ring-blue-500"
+          )
+            option(value=pacienteEncontrado.provincia.Localidades[0].id
+                    selected hidden)= pacienteEncontrado.provincia.Localidades[0].nombre
+
+        div
+          label(for="direccion" class="text-gray-700 font-medium mb-1") Dirección
+          input#direccion(
+            type="text"
+            name="direccion"
+            value=pacienteEncontrado.direccion
+            class="w-full border border-gray-300 rounded px-3 py-2 focus:outline-none focus:ring-2 focus:ring-blue-500"
+          )
+        div
+          label(for="telefono" class="text-gray-700 font-medium mb-1") Telefono
+          input#telefono(
+            type="text"
+            name="telefono"
+            value=pacienteEncontrado.telefono
+            class="w-full border border-gray-300 rounded px-3 py-2 focus:outline-none focus:ring-2 focus:ring-blue-500"
+          )
+        div
+          label(for="telefonoEmer" class="text-gray-700 font-medium mb-1") Telefono de Emergencia
+          input#telefonoEmer(
+            type="text"
+            name="telefonoEmer"
+            value=pacienteEncontrado.telefonoEmer
+            class="w-full border border-gray-300 rounded px-3 py-2 focus:outline-none focus:ring-2 focus:ring-blue-500"
+          )  
+
+        div
+          label(for="email" class="text-gray-700 font-medium mb-1") Email
+          input#email(
+            type="email"
+            name="email"
+            value=pacienteEncontrado.email
+            class="w-full border border-gray-300 rounded px-3 py-2 focus:outline-none focus:ring-2 focus:ring-blue-500"
+          )
+        
+        div
+          label(for="mutuales" class="text-gray-700 font-medium mb-1") Obra Social
+          select#mutuales(
+            name="mutuales"
+            class="w-full border border-gray-300 rounded px-3 py-2 focus:outline-none focus:ring-2 focus:ring-blue-500"
+          )
+            if pacienteEncontrado.Mutual.id == 0
+              -var mutualEncontrada = pacienteEncontrado.Mutual.nombre
+            else 
+              -var mutualEncontrada = pacienteEncontrado.Mutual.nombre + " (" + pacienteEncontrado.Mutual.TipoMutual.nombre + ")" 
+            option(value=pacienteEncontrado.Mutual.id selected hidden)= mutualEncontrada
+              each mutual in mutuales
+                if mutual.TipoMutual
+                  option(value=mutual.id)= mutual.nombre + ' (' + mutual.TipoMutual.nombre + ')'
+                else
+                  option(value=mutual.id)= mutual.nombre
+
+      .text-center.mt-6
+        button(
+          type="submit"
+          class="bg-green-600 hover:bg-green-700 text-white font-bold py-2 px-6 rounded transition"
+        ) Admision a Paciente
+
+      a(
+        href="/admision"
+        class="inline-flex items-center gap-2 border border-gray-400 text-gray-700 hover:bg-gray-200 hover:text-black font-medium py-2 px-4 rounded transition"
+      )
+        img(src="/images/back.svg" alt="Volver" class="w-5 h-5")
+        | Volver
+
+  script.
+    const provinciasData = !{JSON.stringify(provincias)};
+  script(src="/js/script.js")

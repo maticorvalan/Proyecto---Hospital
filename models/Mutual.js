@@ -6,7 +6,8 @@ Mutual.init({
     nombre: {
         type: DataTypes.ENUM( 'No Posee','DOSEP', 'OSDE', 'PAMI', 'IOMA',
             'Federada Salud', 'Galeno', 'Swiss Medical', 'Sancor Salud'),
-        allowNull: false
+        allowNull: false,
+        defaultValue: 'No Posee'
     },
     idTipoMutual: {
         type: DataTypes.INTEGER,

@@ -1,0 +1,40 @@
+extends ../../layoutEmergencia
+block content 
+    form(action="/admision/emergencia/nueva", method="post" class="max-w-xl mx-auto mt-2 bg-white p-8 rounded-lg shadow-md space-y-1")
+        .form-group
+            label(for="dni" class="block text-gray-700 font-semibold mb-2") DNI del Paciente
+            input(type="text", name="dni", class="w-full px-4 py-2 border rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-400")
+            input(type="checkbox", name="nn", id="nn", class="mt-2")
+            label(for="nn", class="ml-2 text-gray-600") Desconocido
+        .form-group
+            label(for="telefono" class="block text-gray-700 font-semibold mb-2") Teléfono
+            input(type="text", name="telefono", id="telefono", class="w-full px-4 py-2 border rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-400")
+        .form-group
+            label(for="genero" class="block text-gray-700 font-semibold mb-2") Género *
+            select(name="genero",
+                required=true
+                class="w-full px-4 py-2 border rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-400")
+                option(value="" disabled selected) Seleccione un género 🡫
+                each genero in generos
+                    option(value=genero.id)= genero.nombre
+
+        .form-group
+            label(for="tipoMotivo" class="block text-gray-700 font-semibold mb-2") Motivo de la emergencia *
+            select#tipomotivo.shadow.appearance-none.border.rounded.w-full.py-2.px-3.text-gray-700.leading-tight(
+                name="tipoMotivo"
+                required= true
+                class="focus:outline-none focus:ring-2 focus:ring-blue-500"
+            )
+                option(value="" disabled selected) Seleccione un tipo 🡫
+                each tipo in tiposMotivo
+                    option(value=tipo.id)= tipo.nombre
+        .form-group
+            label(for="motivo" class="block text-gray-700 font-semibold mb-2") Detalle
+            textarea(name="motivo", rows="3", required=true class="w-full px-4 py-2 border rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-400 resize-none")
+        button.btn.btn-primary(type="submit" class="w-full bg-blue-600 hover:bg-blue-700 text-white font-bold py-2 px-4 rounded-lg transition-colors") Registrar Paciente
+        a(
+            href="/admision/emergencia"
+            class="bg-white inline-flex mt-1 items-center gap-2 border border-gray-400 text-gray-700 hover:bg-gray-300 hover:text-black font-medium py-2 px-4 rounded transition"
+        )
+            img(src="/images/back.svg" alt="Volver" class="w-5 h-5")
+            | Volver

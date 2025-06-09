@@ -11,6 +11,7 @@ Admision.init({
     idUsuario: {
         type: DataTypes.INTEGER,
         allowNull: false,
+        defaultValue: 1, // Asignar un usuario por defecto
     },
     idTipoAdmision: {
         type: DataTypes.INTEGER,
@@ -19,6 +20,7 @@ Admision.init({
     idEstadoAdmision: {
         type: DataTypes.INTEGER,
         allowNull: false,
+        defaultValue: 1, // Asignar un estado de admisión por defecto
     },
     idTurno: {
         type: DataTypes.INTEGER,
@@ -30,7 +32,7 @@ Admision.init({
     },
     detalle: {
         type: DataTypes.STRING,
-        allowNull: false
+        allowNull: true
     },
 }, {
     sequelize,

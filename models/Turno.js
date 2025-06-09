@@ -4,7 +4,7 @@ import sequelize from '../config/db.js';
 class Turno extends Model {}
 Turno.init({
     fecha: {
-        type: DataTypes.DATE,
+        type: DataTypes.DATEONLY,
         allowNull: false
     },
     hora: {

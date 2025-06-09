@@ -5,11 +5,11 @@ import sequelize from '../config/db.js';
 class Internacion extends Model {}
 Internacion.init({
     fechaIngreso: {
-        type: DataTypes.DATE,
+        type: DataTypes.DATEONLY,
         allowNull: false
     },
     fechaSalida: {
-        type: DataTypes.DATE,
+        type: DataTypes.DATEONLY,
         allowNull: true
     },
     idAdmision: {

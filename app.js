@@ -1,7 +1,8 @@
 import express from 'express';
 import path from 'path';
 import models from './models/index.js';
-
+import session from 'express-session';
+import flash from 'connect-flash';
 
 const app = express();
 const router = express.Router();
@@ -15,35 +16,35 @@ app.use(express.static('public'));
 app.use("/images", express.static("images"));
 app.use(express.urlencoded({}));
 app.use(express.json());
+// Configuración de la sesión
+app.use(session({
+  secret: 'corven',
+  resave: false,
+  saveUninitialized: true,
+  cookie: { secure: false } // Cambiar a true en producción
+}));
+app.use(flash()); // Configuración de connect-flash para mensajes flash
+// Middleware para pasar mensajes flash a las vistas
+app.use((req, res, next) => {
+  res.locals.success_msg = req.flash('success');
+  res.locals.error_msg = req.flash('error');
+  res.locals.warning_msg = req.flash('warning');
+  next();
+});
+
+app.locals.formatDate = (date) => {
+  return date.toLocaleDateString('es-ES'); // Ajusta el locale según necesites
+};
+
 app.use('/', indexRouter);
 app.use('/admision', admisionRouter);
 
 
-// app.get(['/', '/inicio'], (req, res) => {
-//   res.render('index', {});
-// });
 
 app.get('/login', (req, res) => {
   res.render('auth/login', {});
 });
 
-// app.get('/admision/pacientes/pacienteNuevo', (req, res) => {
-//   //res.render('admision/main', {});
-//   res.render('admision/pacientes/pacienteNuevo', { title: 'Formulario de Admisión', tiposAdmision: ['urgencia', 'consulta', 'internacion'] });
-// });
-// app.get('/admision/pacientes/dnipaciente', (req, res) => {
-//   //res.render('admision/main', {});
-//   res.render('admision/pacientes/dnipaciente');
-// });
-
-// app.get('/admision/emergencia', (req, res) => {
-//   //res.render('admision/main', {});
-//   res.render('admision/emergencia', { title: 'Formulario de Emergencia'});
-// });
-// app.get('/admision/main', (req, res) => {
-//   //res.render('admision/main', {});
-//   res.render('admision/main', { title: 'Formulario de Consulta'});
-// });
 
 models.sequelize.sync({ alter: true })
   .then(() => {

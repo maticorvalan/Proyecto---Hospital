@@ -1,0 +1,75 @@
+extends ../../layoutEmergencia
+
+block content
+  //- DataTables CSS & JS
+  link(rel="stylesheet" href="https://cdn.datatables.net/2.3.2/css/dataTables.dataTables.css")
+  script(src="https://cdn.datatables.net/2.3.2/js/jquery.dataTables.min.js")
+
+  //- Contenedor principal
+  div(class="bg-gray-50 py-5 h-[85vh] top-0 overflow-y-auto")
+    .max-w-6xl.mx-auto.px-4
+      h1.text-3xl.font-extrabold.text-gray-800.mb-6.text-center
+        | Pacientes en Sala de Emergencia
+
+      //- Tabla con DataTables + Tailwind
+      div(class='bg-white shadow-lg rounded-xl overflow-x-auto')
+        table#tablaEmergencia.table-auto.min-w-full.divide-y.divide-gray-200
+          thead
+            tr.bg-red-100
+              each thTitle in ['DNI', 'Teléfono', 'Género', 'Fecha Ingreso', 'Habitación', 'Acciones']
+                th.px-4.py-3.text-left.text-sm.font-semibold.text-red-700.uppercase= thTitle
+          tbody.divide-y.divide-gray-200
+            each paciente in pacientes
+              - const adm  = paciente.Admisions[0]
+              - const intern = adm.Internacions[0]
+              - const alaNombre = intern.Cama.Habitacion.Ala.nombre
+              tr(class="hover:bg-gray-50")
+                td.px-4.py-3.text-sm.text-gray-700= paciente.dni || 'No Disponible'
+                td.px-4.py-3.text-sm.text-gray-700= paciente.telefono || 'No Disponible'
+                td.px-4.py-3.text-sm.text-gray-700= paciente.Genero.nombre
+                td.px-4.py-3.text-sm.text-gray-700= formatDate(intern.fechaIngreso)
+                td.px-4.py-3.text-sm.text-gray-700= `Ala ${alaNombre} - Cama ${intern.Cama.numero}`
+                td.px-4.py-3.text-sm.text-center
+                  .flex.justify-center.items-center.space-x-3
+                    //- Agregar información
+                    a.relative.group(
+                      href=''
+                      class="inline-flex p-2 bg-blue-200 rounded-full hover:bg-blue-600 transition"
+                      title="Agregar información"
+                    )
+                      img(src="/images/icon/icon-upinfo.svg" 
+                          alt=""
+                          class="w-5 h-5")
+                      span(class="absolute left-1/2 transform -translate-x-1/2 bottom-full mb-2 px-2 py-1 text-xs text-white bg-black rounded opacity-0 group-hover:opacity-100 transition-opacity pointer-events-none")
+                        | Agregar datos
+
+                    //- Cambiar sala
+                    a.relative.group(
+                      href=''
+                      class="inline-flex p-2 bg-green-300 rounded-full hover:bg-green-700 transition"
+                      title="Cambiar de sala"
+                    )
+                      img(src="/images/icon/icon-changeala.svg" 
+                          alt=""
+                          class="w-5 h-5")
+                      span(class="absolute left-1/2 transform -translate-x-1/2 bottom-full mb-2 px-2 py-1 text-xs text-white bg-black rounded opacity-0 group-hover:opacity-100 transition-opacity pointer-events-none")
+                        | Cambiar sala
+      a(
+            href="/admision/emergencia"
+            class="bg-white inline-flex mt-1 items-center gap-2 border border-gray-400 text-gray-700 hover:bg-gray-300 hover:text-black font-medium py-2 px-4 rounded transition"
+        )
+            img(src="/images/back.svg" alt="Volver" class="w-5 h-5")
+            | Volver                  
+
+  //- Inicialización de DataTables
+  script.
+    $(function() {
+      $('#tablaEmergencia').DataTable({
+        paging: true,
+        info: false,
+        stripeClasses: [],
+        language: {
+          url: '//cdn.datatables.net/plug-ins/2.3.2/i18n/es-ES.json'
+        }
+      });
+    });

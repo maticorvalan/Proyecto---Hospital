@@ -5,11 +5,8 @@ class Paciente extends Model {}
 Paciente.init({
     dni: {
         type: DataTypes.STRING,
-        allowNull: false,
+        allowNull: true,
         unique: 'unique_dni',
-        validate: {
-            is: /^\d{7,8}$/ // Validacion para DNI argentino
-        }
     },
     nombre: {
         type: DataTypes.STRING,
@@ -20,10 +17,15 @@ Paciente.init({
         allowNull: false
     },
     fecha_nacimiento: {
-        type: DataTypes.DATE,
-        allowNull: false
+        type: DataTypes.DATEONLY,
+        allowNull: false,
+        defaultValue:'1900-01-01', // Fecha por defecto si no se proporciona
     },
     telefono: {
+        type: DataTypes.STRING,
+        allowNull: true
+    },
+    telefonoEmer:{
         type: DataTypes.STRING,
         allowNull: true
     },
@@ -45,10 +47,12 @@ Paciente.init({
     idProvincia: {
         type: DataTypes.INTEGER,
         allowNull: false,
+        defaultValue: 24 // No tiene provincia por defecto
     },
     idMutual: {
         type: DataTypes.INTEGER,
-        allowNull: true
+        allowNull: true,
+        defaultValue: 0 // No tiene mutual por defecto
     }
     
 }, {

@@ -6,7 +6,7 @@ EstadoAdmision.init({
     nombre: {
         type: DataTypes.ENUM('Esperando Cama', 'Aceptado', 'Rechazado'),
         allowNull: false,
-        defaultValue: 'Esperando Cama',
+        defaultValue: 'Aceptado',
     },
 }, {
     sequelize,

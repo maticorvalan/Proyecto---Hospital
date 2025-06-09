@@ -1,8 +1,36 @@
 extends ../../layout
+
 block content 
-    .mx-auto
-        h1.text-3xl.font-bold.text-blue-600.mb-4 Ingrese el DNI del Paciente
-        form(action="/admision/buscar" method="POST" class="bg-white.shadow-md.rounded.px-8.pt-6.pb-8.mb-4" novalidate)
-            div(class="mb-4")
-                input#dni.shadow.appearance-none.border.rounded.w-full.py-2.px-3.text-gray-700.leading-tight(type="text" name="dni" placeholder="11.111.111" required)
-            button(class= "bg-blue-500 hover:bg-blue-700 text-white font-bold py-2 px-4 rounded type= submit") Buscar Paciente
+  .mx-auto.max-w-md
+    if (error_msg && error_msg != '')
+      .bg-red-100.border-l-4.border-red-500.text-red-700.p-4.mb-6.rounded(role="alert")
+        p.font-bold= error_msg
+
+    h1.text-3xl.font-bold.text-blue-600.mb-6.text-center Ingrese el DNI del Paciente
+
+    form(
+      action="/admision/buscar"
+      method="POST"
+      class="bg-white shadow-md rounded px-8 pt-6 pb-8 mb-4"
+      novalidate
+    )
+      .mb-4
+        input#dni.shadow.appearance-none.border.rounded.w-full.py-2.px-3.text-gray-700.leading-tight(
+          type="text"
+          name="dni"
+          placeholder="11.111.111"
+          required
+        )
+
+      .flex.justify-between.items-center.mt-6
+        button(
+          type="submit"
+          class="bg-blue-500 hover:bg-blue-700 text-white font-bold py-2 px-4 rounded transition"
+        ) Buscar Paciente
+
+        a(
+          href="/admision"
+          class="inline-flex items-center gap-2 border border-gray-400 text-gray-700 hover:bg-gray-200 hover:text-black font-medium py-2 px-4 rounded transition"
+        )
+          img(src="/images/back.svg" alt="Volver" class="w-5 h-5")
+          | Volver
