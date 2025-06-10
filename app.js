@@ -4,6 +4,7 @@ import models from './models/index.js';
 import session from 'express-session';
 import flash from 'connect-flash';
 import passport from 'passport';
+import MySQLStore from 'express-mysql-session';
 import { configurePassport } from './config/auth.js';
 
 const app = express();
@@ -24,11 +25,17 @@ app.use("/images", express.static(path.join(__dirname,"images")));
 app.use(express.urlencoded({}));
 app.use(express.json());
 // Configuración de la sesión
+const sessionStore = new MySQLStore(dbOptions);
+
 app.use(session({
-  secret: 'corven',
+  key: 'his_session_id',
+  secret: process.env.SESSION_SECRET,
+  store: sessionStore,
   resave: false,
   saveUninitialized: true,
-  cookie: { secure: false } // Cambiar a true en producción
+  cookie: { secure: false,
+    maxAge: 1000*60*60,
+   } // Cambiar a true en producción
 }));
 app.use(flash()); // Configuración de connect-flash para mensajes flash
 // Middleware para pasar mensajes flash a las vistas
