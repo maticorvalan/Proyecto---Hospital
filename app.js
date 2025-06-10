@@ -4,7 +4,7 @@ import models from './models/index.js';
 import session from 'express-session';
 import flash from 'connect-flash';
 import passport from 'passport';
-import MySQLStore from 'express-mysql-session';
+import sessionStore from './config/sessionStore.js';
 import { configurePassport } from './config/auth.js';
 
 const app = express();
@@ -25,7 +25,6 @@ app.use("/images", express.static(path.join(__dirname,"images")));
 app.use(express.urlencoded({}));
 app.use(express.json());
 // Configuración de la sesión
-const sessionStore = new MySQLStore(dbOptions);
 
 app.use(session({
   key: 'his_session_id',
@@ -34,7 +33,7 @@ app.use(session({
   resave: false,
   saveUninitialized: true,
   cookie: { secure: false,
-    maxAge: 1000*60*60,
+    maxAge: 1000*60*60*24,
    } // Cambiar a true en producción
 }));
 app.use(flash()); // Configuración de connect-flash para mensajes flash
@@ -62,7 +61,7 @@ app.use('/admision', admisionRouter);
 
 
 
-models.sequelize.sync({ alter: true })
+models.sequelize.sync({ force:false })
   .then(() => {
     console.log('Conexión a la base de datos establecida correctamente.');
     app.listen(PORT, () => {
