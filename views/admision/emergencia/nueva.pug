@@ -1,5 +1,5 @@
 extends ../../layoutEmergencia
-block content 
+block content
     form(action="/admision/emergencia/nueva", method="post" class="max-w-xl mx-auto mt-2 bg-white p-8 rounded-lg shadow-md space-y-1")
         .form-group
             label(for="dni" class="block text-gray-700 font-semibold mb-2") DNI del Paciente
@@ -38,3 +38,11 @@ block content
         )
             img(src="/images/back.svg" alt="Volver" class="w-5 h-5")
             | Volver
+            
+    if error_msg && error_msg != ''
+        script.
+                Swal.fire({
+                    icon: 'warning',
+                    html: `<p><strong>!#{error_msg}</strong></p>`,
+                    confirmButtonText: 'Aceptar'
+                })        

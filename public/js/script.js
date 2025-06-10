@@ -2,15 +2,21 @@ function derivadoVisible() {
   const tipoAdmisionSelect = document.getElementById('tipoAdmision');
   const medicoDerivanteInput = document.getElementById('medicoDerivante');
   if (!tipoAdmisionSelect || !medicoDerivanteInput) return;
+
   function toggleMedicoDerivante() {
     const selected = tipoAdmisionSelect.options[tipoAdmisionSelect.selectedIndex];
     if (selected && selected.textContent.trim().toLowerCase() === 'derivado') {
       medicoDerivanteInput.disabled = false;
+      medicoDerivanteInput.classList.remove('bg-gray-100', 'cursor-not-allowed');
+      medicoDerivanteInput.classList.add('bg-white', 'focus:ring-blue-500');
     } else {
       medicoDerivanteInput.disabled = true;
       medicoDerivanteInput.value = '';
+      medicoDerivanteInput.classList.add('bg-gray-100', 'cursor-not-allowed');
+      medicoDerivanteInput.classList.remove('bg-white', 'focus:ring-blue-500');
     }
   }
+
   tipoAdmisionSelect.addEventListener('change', toggleMedicoDerivante);
   toggleMedicoDerivante();
 }
@@ -41,3 +47,4 @@ document.addEventListener('DOMContentLoaded', function() {
   derivadoVisible();              // Habilita o deshabilita el campo de médico derivante
   localidadesPorProvincia();      // Carga las localidades al seleccionar una provincia
 });
+

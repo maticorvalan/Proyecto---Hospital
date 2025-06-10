@@ -1,14 +1,18 @@
 import express from 'express';
-import path from 'path';
 import models from './models/index.js';
 import session from 'express-session';
 import flash from 'connect-flash';
+import passport from 'passport';
+import { configurePassport } from './config/auth.js';
 
 const app = express();
 const router = express.Router();
-const PORT = process.env.PORT || 3000;
+const PORT = process.env.PORT;
+
 import indexRouter from './routes/index.js';
 import admisionRouter from './routes/admision.js';
+import authRouter from './routes/auth.js';
+
 
 app.set('view engine', 'pug');
 app.set('views', './views');
@@ -31,19 +35,21 @@ app.use((req, res, next) => {
   res.locals.warning_msg = req.flash('warning');
   next();
 });
+// Middleware para Autenticacion 
+app.use(passport.initialize());
+app.use(passport.session());
+configurePassport(passport);
+
 
 app.locals.formatDate = (date) => {
-  return date.toLocaleDateString('es-ES'); // Ajusta el locale según necesites
+  const localDate = new Date(date.getTime() - date.getTimezoneOffset() * 60000);
+  return localDate.toISOString().split('T')[0];
 };
 
+app.use('/login', authRouter);
 app.use('/', indexRouter);
 app.use('/admision', admisionRouter);
 
-
-
-app.get('/login', (req, res) => {
-  res.render('auth/login', {});
-});
 
 
 models.sequelize.sync({ alter: true })

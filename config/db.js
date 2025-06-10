@@ -1,11 +1,13 @@
 // models/db.js
 import { Sequelize } from "sequelize";
+import 'dotenv/config'
 
 const sequelize = new Sequelize(
-  'hospitalhis',
-  'root',
-  '', {
-  host: '192.168.1.18',
+  process.env.DB_NAME,
+  process.env.DB_USER,
+  process.env.DB_PASSWORD, {
+  host: process.env.DB_HOST,
+  port: process.env.DB_PORT,
   dialect: 'mysql',
   logging: false
 });

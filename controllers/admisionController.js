@@ -50,17 +50,14 @@ async function crear(req, res) {
                 req.flash('error','El paciente no tiene turno asignado');  
                 return res.redirect('/admision/nuevo');
             }
-            console.log(turnoNuevo.fecha);
-            console.log(hoy);
-            
-            
-            if (turnoNuevo.fecha !== hoy) {
+            const fechaHoy = req.app.locals.formatDate(hoy);
+
+            if (turnoNuevo.fecha !== fechaHoy) {
                 req.flash('warning','El paciente no tiene turno para hoy');
                 return res.redirect('/admision/nuevo');
             }
             const fechaHoraTurno = new Date(`${turnoNuevo.fecha}T${turnoNuevo.hora}`);
             const diferenciaMin = (hoy - fechaHoraTurno) / 60000;
-            console.log(diferenciaMin);
             
             if (diferenciaMin > 20) {
                 req.flash('warning', 'El turno ya venció hace más de 20 minutos');
@@ -68,12 +65,15 @@ async function crear(req, res) {
                 await turnoNuevo.save();
                 return res.redirect('/admision/nuevo');
             }
+            turnoNuevo.estado = false;
+            await turnoNuevo.save();
         }
+        
         const paciente = await Paciente.findByPk(idPaciente);
         const camaCompatible = await camaDisponible(paciente.idGenero);
         if (!camaCompatible) {
             req.flash('error','No hay camas disponibles en este momento')
-            return res.status(400).send('No hay camas compatibles disponibles.');
+            return res.status(400).redirect('/admision/nuevo');
         }
 
         const admisionNueva = await Admision.create({
@@ -170,19 +170,40 @@ async function nuevaEmergencia(req, res) {
 async function crearEmergencia(req, res) {
     const paciente = req.body;
     let dniPaciente = '';
+    let id = '';
     if(req.body.nn === 'on') {
-        dniPaciente = null;
+        dniPaciente = await generarDniNN();
     } else {
         dniPaciente = paciente.dni;
+        if (dniPaciente.length != 8) {
+            req.flash('error', 'Ingrese un DNI valido (8 numeros)');
+            return res.status(400).redirect('/admision/emergencia/nueva');
+        }
     }
+
     try {
-        const nuevoPaciente = await Paciente.create({
+        const pacienteAnterior = await Paciente.findOne({
+            where: {dni:dniPaciente}
+        })
+        if (!pacienteAnterior) {
+            const nuevoPaciente = await Paciente.create({
             dni: dniPaciente,
             nombre: "Rick",
             apellido: "Grimes",
             idGenero: paciente.genero,
             telefono: paciente.telefono,
         });
+            id = nuevoPaciente.id
+        }else{
+            id = pacienteAnterior.id
+            const admitido = await Admision.findOne({
+                    where: {idPaciente: id}
+                })
+                if (admitido) {
+                    req.flash('error','El paciente ya se encuentra admitido');
+                    return res.redirect('/admision/emergencia/nueva');
+                }
+        }
 
         const camaDisponible = await Cama.findOne({
             where: {estado:true},
@@ -200,7 +221,7 @@ async function crearEmergencia(req, res) {
             return res.status(400).send('No hay camas disponibles en el ala de Emergencias.');
         }
         const admisionEmergencia = await Admision.create({
-            idPaciente: nuevoPaciente.id,
+            idPaciente: id,
             idTipoAdmision: 1, // Emergencia
             idTipoMotivo: paciente.tipoMotivo,
             detalle: paciente.detalleMotivo,
@@ -215,7 +236,7 @@ async function crearEmergencia(req, res) {
         camaDisponible.estado = false; // Marca la cama como ocupada
         await camaDisponible.save();
         // Guarda el ID del nuevo paciente en la sesión para usarlo en la admisión
-        req.session.idPaciente = nuevoPaciente.id;
+        req.session.idPaciente = id;
         req.session.admisionExitosa = {
             message: 'Emergencia creada con exito',
             cama: camaDisponible.numero,
@@ -305,7 +326,12 @@ async function buscarpaciente(req,res) {
 
 async function nuevoTurno(req,res) {
     const turno = req.body;
-    console.log(turno);
+    const hoy = req.app.locals.formatDate(new Date());
+
+    if (turno.fechaTurno < hoy) {
+        req.flash('error', 'La fecha del turno debe ser posterior a hoy');   
+        return res.status(400).redirect('/admision/turno');
+    }
     
     try {
         const nuevoTurno = await Turno.create({
@@ -329,6 +355,15 @@ async function nuevoTurno(req,res) {
         res.redirect('/admision/turno');
     }
 
+}
+
+async function generarDniNN() {
+  const totalNN = await Paciente.count({
+    where: {
+      dni: { [Op.like]: 'NN-%' } // Cuenta solo los NN
+    }
+  });
+  return `NN-${(totalNN + 1).toString().padStart(3, '0')}`; // NN-001, NN-002, ...
 }
 
 export default {

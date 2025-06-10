@@ -1,89 +1,102 @@
 extends ../layout
 
 block content
+  section(class="mb-12")
+    h1(class="text-4xl md:text-5xl font-extrabold text-blue-700 text-center") Menú de Admisión
 
-    section.mb-10
-        h1.text-5xl.font-bold.text-blue-600.text-center Menu de Admisión
+  section(class="mb-10")
+    form(
+      action="/admision/nuevo"
+      method="post"
+      class="bg-white border border-gray-200 shadow-xl rounded-2xl p-8 max-w-4xl mx-auto grid grid-cols-1 md:grid-cols-2 gap-6 text-lg"
+    )
 
-    section.mb-8
-            form(action="/admision/nuevo" method="post" class="text-xl grid grid-cols-2 gap-6") 
-                .mb-3
-                    label.block.text-gray-700.text-sm.font-bold.mb-2(for="tipoAdmision") Tipo de Admisión *
-                    select#tipoAdmision.shadow.appearance-none.border.rounded.w-full.py-2.px-3.text-gray-700.leading-tight(
-                        name="tipoAdmision"
-                        required
-                        class="focus:outline-none focus:ring-2 focus:ring-blue-500"
+      .col-span-1
+        label(for="tipoAdmision" class="block text-gray-800 text-sm font-semibold mb-2") Tipo de Admisión *
+        select#tipoAdmision(
+          name="tipoAdmision"
+          required
+          class="shadow border border-gray-300 rounded-lg w-full py-3 px-4 text-gray-700 leading-tight focus:outline-none focus:ring-2 focus:ring-blue-500"
+        )
+          option(value="" disabled selected) Seleccione un tipo 🡫
+          each tipo in tiposAdmision
+            option(value=tipo.id)= tipo.nombre
 
-                    )
-                        option(value="" disabled selected) Seleccione un tipo 🡫
-                        each tipo in tiposAdmision
-                            option(value=tipo.id)= tipo.nombre
-                .mb-3
-                    label.block.text-gray-700.text-sm.font-bold.mb-2(for="medicoDerivante") Médico Derivante (Si aplica)
-                    input#medicoDerivante.shadow.appearance-none.border.rounded.w-full.py-2.px-3.text-gray-700.leading-tight(
-                        type="text"
-                        disabled
-                        name="medicoDerivante"
-                        placeholder="Nombre del médico"
-                        class="focus:outline-none focus:ring-2 focus:ring-blue-500"
-                    )
-                .mb-3
-                    label.block.text-gray-700.text-sm.font-bold.mb-2(for="tipoMotivo") Motivo de Consulta *
-                    select#tipomotivo.shadow.appearance-none.border.rounded.w-full.py-2.px-3.text-gray-700.leading-tight(
-                        name="tipoMotivo"
-                        required
-                        class="focus:outline-none focus:ring-2 focus:ring-blue-500"
-                    )
-                        option(value="" disabled selected) Seleccione un tipo 🡫
-                        each tipo in tiposMotivo
-                            option(value=tipo.id)= tipo.nombre
-                .mt-3.col-span-2
-                    label.block.text-gray-700.text-sm.font-bold.mb-2(for="detalleMotivo") Detalle *
-                    textarea#detalleMotivo.shadow.appearance-none.border.rounded.w-full.py-2.px-3.text-gray-700.leading-tight(
-                        name="detalleMotivo"
-                        rows="4"
-                        placeholder="Describa el motivo principal de la admisión..."
-                        required
-                        class="focus:outline-none focus:ring-2 focus:ring-blue-500"
-                    ) 
+      .col-span-1
+        label(for="medicoDerivante" class="block text-gray-800 text-sm font-semibold mb-2") Médico Derivante (Si aplica)
+        input#medicoDerivante(
+          type="text"
+          name="medicoDerivante"
+          placeholder="Nombre del médico"
+          disabled
+          class="shadow border border-gray-300 rounded-lg w-full py-3 px-4 text-gray-700 leading-tight bg-gray-100 cursor-not-allowed"
+        )
 
-                .mt-3.flex.justify-around.col-span-2
-                    button(type="submit" class="bg-blue-600 hover:bg-gray-200 hover:text-black text-white font-bold py-2 px-6 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500 focus:ring-opacity-50 transition-colors")
-                        | Registrar Admisión
-                    a(
-                        class="inline-flex items-center gap-2 bg-blue-600 text-white hover:bg-gray-200 hover:text-black font-medium py-2 px-4 rounded transition"
-                    )
-                        img(src="/images/back.svg" alt="Volver" class="w-6 h-6")
-                        | Volver
-    if success_msg && success_msg != ''
-        script.
-                Swal.fire({
-                    icon: 'success',
-                    html: `<p><strong>!#{success_msg}</strong></p>`,
-                    confirmButtonText: 'Aceptar'
-                })
-    if error_msg && error_msg != ''
-        script.
-                Swal.fire({
-                    title: 'Turno sin asignar',
-                    icon: 'error',
-                    text: 'El paciente no tiene turno asignado, desea asignar uno nuevo?',
-                    showCancelButton: true,
-                    cancelButtonText: "No!",
-                    cancelButtonColor: "#d33",
-                    confirmButtonColor: "#3085d6",
-                    confirmButtonText: "Si, Asignar!"
-                }).then((result) => {
-                    if (result.isConfirmed) {
-                        window.location.href = "/admision/turno";
-                    }
-                    });
+      .col-span-1
+        label(for="tipoMotivo" class="block text-gray-800 text-sm font-semibold mb-2") Motivo de Consulta *
+        select#tipomotivo(
+          name="tipoMotivo"
+          required
+          class="shadow border border-gray-300 rounded-lg w-full py-3 px-4 text-gray-700 leading-tight focus:outline-none focus:ring-2 focus:ring-blue-500"
+        )
+          option(value="" disabled selected) Seleccione un tipo 🡫
+          each tipo in tiposMotivo
+            option(value=tipo.id)= tipo.nombre
 
-    if warning_msg && warning_msg != ''
-        script.
-                Swal.fire({
-                    icon: 'warning',
-                    html: `<p><strong>#{warning_msg}!</strong></p>`,
-                    confirmButtonText: 'Aceptar'
-                })
-    script(src="/js/script.js")
+      .col-span-2
+        label(for="detalleMotivo" class="block text-gray-800 text-sm font-semibold mb-2") Detalle *
+        textarea#detalleMotivo(
+          name="detalleMotivo"
+          rows="4"
+          placeholder="Describa el motivo principal de la admisión..."
+          required
+          class="shadow border border-gray-300 rounded-lg w-full py-3 px-4 text-gray-700 leading-tight focus:outline-none focus:ring-2 focus:ring-blue-500"
+        )
+
+      .col-span-2.flex.justify-center.gap-6.mt-4
+        button(
+          type="submit"
+          class="bg-blue-600 hover:bg-blue-700 text-white font-bold py-3 px-6 rounded-lg shadow transition duration-200"
+        ) Registrar Admisión
+        a(
+          href="/admision"
+          class="inline-flex items-center gap-2 bg-gray-100 border border-gray-400 text-gray-700 hover:bg-gray-200 hover:text-black font-medium py-3 px-6 rounded-lg transition duration-200"
+        )
+          img(src="/images/back.svg" alt="Volver" class="w-5 h-5")
+          | Volver
+
+  //- SweetAlert mensajes
+  if success_msg && success_msg != ''
+    script.
+      Swal.fire({
+        icon: 'success',
+        html: `<p><strong>!#{success_msg}</strong></p>`,
+        confirmButtonText: 'Aceptar'
+      })
+
+  if error_msg && error_msg != ''
+    script.
+      Swal.fire({
+        title: 'Turno sin asignar',
+        icon: 'error',
+        text: 'El paciente no tiene turno asignado, desea asignar uno nuevo?',
+        showCancelButton: true,
+        cancelButtonText: "No!",
+        cancelButtonColor: "#d33",
+        confirmButtonColor: "#3085d6",
+        confirmButtonText: "Sí, Asignar!"
+      }).then((result) => {
+        if (result.isConfirmed) {
+          window.location.href = "/admision/turno";
+        }
+      });
+
+  if warning_msg && warning_msg != ''
+    script.
+      Swal.fire({
+        icon: 'warning',
+        html: `<p><strong>#{warning_msg}!</strong></p>`,
+        confirmButtonText: 'Aceptar'
+      })
+
+  script(src="/js/script.js")

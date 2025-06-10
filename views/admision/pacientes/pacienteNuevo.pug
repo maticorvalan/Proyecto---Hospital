@@ -4,11 +4,6 @@ block content
   .container.mx-auto.min-h-screen.py-8
     h1.text-3xl.font-semibold.text-gray-800.mb-6.text-center= title
 
-    if error
-      .bg-red-100.border-l-4.border-red-500.text-red-700.p-4.mb-6.rounded(role="alert")
-        p.font-bold Error
-        p= error
-
     form(action="/admision/nuevo-paciente" method="POST" class="bg-white shadow-lg rounded-lg px-8 pt-6 pb-8 mb-6 max-w-4xl mx-auto")
       //- SECCIÓN DATOS DEL PACIENTE
       section.mb-8
@@ -113,7 +108,7 @@ block content
               placeholder="Número de contacto"
               class="focus:outline-none focus:ring-2 focus:ring-blue-500"
             )
-            .mb-4
+          .mb-4
               label.block.text-gray-700.text-sm.font-bold.mb-2(for="telefonoEmer") Teléfono de Emergencia *
               input#telefono.shadow.appearance-none.border.rounded.w-full.py-2.px-3.text-gray-700.leading-tight(
                 type="tel"

@@ -2,9 +2,13 @@ extends ../../layout
 
 block content
   .max-w-2xl.mx-auto.p-6.bg-white.rounded-lg.shadow-md.mt-8
-    if success_msg
+    if success_msg && success_msg != ''
       .bg-green-100.border-l-4.border-green-500.text-green-700.p-4.mb-6.rounded(role="alert")
         p.font-bold= success_msg
+
+    if error_msg && error_msg != ''
+      .bg-red-100.border-l-4.border-red-500.text-red-700.p-4.mb-6.rounded(role="alert")
+        p.font-bold= error_msg
 
     h2.text-3xl.font-bold.text-gray-800.mb-6.text-center Datos del Paciente
 

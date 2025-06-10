@@ -1,56 +1,59 @@
 extends ../../layout
 
 block content
-  h1.text-2xl.font-bold.text-blue-600.mb-6.text-center Ingrese el DNI del Paciente
+  h1.text-3xl.font-bold.text-center.text-blue-700.mb-10 Ingreso de Turno para Paciente
 
-  //- Formulario de búsqueda por DNI
   form(
     action="/admision/turno"
     method="POST"
-    class="bg-white shadow-md rounded-lg max-w-md mx-auto px-8 pt-6 pb-8 mb-10"
+    class="bg-white/90 shadow-xl backdrop-blur-md rounded-2xl max-w-md mx-auto px-10 pt-8 pb-10 mb-12 border border-blue-200"
     novalidate
   )
     if error_msg && error_msg != ''
-      .bg-red-100.border-l-4.border-red-500.text-red-700.p-1.mb-3.rounded(role="alert")
-        p.font-bold= error_msg
-    div.mb-4
-      label.block.text-gray-700.text-sm.font-bold.mb-2(for="dni") DNI del paciente
-      input#dni.shadow.appearance-none.border.rounded.w-full.py-2.px-3.text-gray-700.leading-tight(
+      .bg-red-100.border-l-4.border-red-500.text-red-700.p-3.mb-4.rounded-lg(role="alert")
+        p.font-semibold= error_msg
+
+    div.mb-6
+      label.block.text-gray-800.text-sm.font-bold.mb-2(for="dni") DNI del Paciente
+      input#dni(class="shadow-md border border-gray-300 rounded-lg w-full py-2.5 px-4 text-gray-700 focus:outline-none focus:ring-2 focus:ring-blue-400"
         type="text"
         name="dni"
-        placeholder="11.111.111"
+        placeholder="Ej: 11222333"
         required
       )
+
     button(
       type="submit"
-      class="w-full bg-blue-500 hover:bg-blue-700 text-white font-bold py-2 px-4 rounded transition"
+      class="w-full bg-blue-600 hover:bg-blue-700 text-white font-bold py-2.5 px-4 rounded-lg transition-all duration-300 shadow-md"
     ) Buscar Paciente
-  if !paciente
-    .mt-4.max-w-md.mx-auto.flex.justify-end
-      a(
-        href="/admision"
-        class="bg-white inline-flex items-center gap-2 border border-gray-400 text-gray-700 hover:bg-gray-300 hover:text-black font-medium py-2 px-4 rounded transition"
-      )
-        img(src="/images/back.svg" alt="Volver" class="w-8 h-8")
-        | Volver
+
+    if !paciente
+      .mt-6.flex.justify-end
+        a(
+          href="/admision"
+          class="inline-flex items-center gap-2 text-sm border border-gray-400 text-gray-700 hover:bg-gray-200 hover:text-black py-2 px-4 rounded transition"
+        )
+          img(src="/images/back.svg" alt="Volver" class="w-5 h-5")
+          | Volver
 
   //- Mostrar el segundo formulario solo si 'paciente' existe
   if paciente
     form(
       action="/admision/nuevo-turno"
       method="POST"
-      class="bg-white shadow-lg rounded-lg px-8 pt-6 pb-8 max-w-4xl mx-auto"
+      class="bg-white/90 shadow-xl backdrop-blur-md rounded-2xl px-10 pt-8 pb-10 max-w-4xl mx-auto border border-green-200"
     )
-      .bg-green-100.border-l-4.border-green-500.text-green-700.p-4.mb-6.rounded(role="alert")
-        p.font-bold= success_msg
+      if success_msg
+        .bg-green-100.border-l-4.border-green-500.text-green-700.p-3.mb-6.rounded-lg(role="alert")
+          p.font-semibold= success_msg
+
       fieldset
-        legend.text-xl.font-semibold.text-gray-700.mb-6.pb-2.border-b.border-gray-200 Datos del Turno
+        legend.text-2xl.font-bold.text-gray-800.mb-8.border-b.pb-2 Datos del Turno
 
         div(class="grid grid-cols-1 md:grid-cols-2 gap-6")
-
           .mb-4
-            label.block.text-gray-700.text-sm.font-bold.mb-2(for="paciente") Paciente
-            input#paciente.shadow.appearance-none.border.rounded.w-full.py-2.px-3.text-gray-700.bg-gray-100.cursor-not-allowed(
+            label.block.text-gray-800.text-sm.font-bold.mb-2(for="paciente") Paciente
+            input#paciente(class="bg-gray-100 cursor-not-allowed shadow-md border border-gray-300 rounded-lg w-full py-2.5 px-4 text-gray-700"
               type="text"
               name="paciente"
               value=paciente.nombre + ' ' + paciente.apellido
@@ -58,41 +61,39 @@ block content
             )
 
           .mb-4
-            label.block.text-gray-700.text-sm.font-bold.mb-2(for="medico") Médico *
-            input#medico.shadow.appearance-none.border.rounded.w-full.py-2.px-3.text-gray-700.leading-tight(
+            label.block.text-gray-800.text-sm.font-bold.mb-2(for="medico") Médico *
+            input#medico(class="shadow-md border border-gray-300 rounded-lg w-full py-2.5 px-4 text-gray-700 focus:outline-none focus:ring-2 focus:ring-blue-400"
               type="text"
               name="medico"
               placeholder="Nombre del Médico"
               required
-              class="focus:outline-none focus:ring-2 focus:ring-blue-500"
             )
 
           .mb-4
-            label.block.text-gray-700.text-sm.font-bold.mb-2(for="fechaTurno") Fecha del Turno*
-            input#fechaTurno.shadow.appearance-none.border.rounded.w-full.py-2.px-3.text-gray-700.leading-tight(
+            label.block.text-gray-800.text-sm.font-bold.mb-2(for="fechaTurno") Fecha del Turno *
+            input#fechaTurno(class="shadow-md border border-gray-300 rounded-lg w-full py-2.5 px-4 text-gray-700 focus:outline-none focus:ring-2 focus:ring-blue-400"
               type="date"
               name="fechaTurno"
               required
-              class="focus:outline-none focus:ring-2 focus:ring-blue-500"
             )
 
           .mb-4
-            label.block.text-gray-700.text-sm.font-bold.mb-2(for="hora") Hora *
-            input#hora.shadow.appearance-none.border.rounded.w-full.py-2.px-3.text-gray-700.leading-tight(
+            label.block.text-gray-800.text-sm.font-bold.mb-2(for="hora") Hora *
+            input#hora(class="shadow-md border border-gray-300 rounded-lg w-full py-2 5 px-4 text-gray-700 focus:outline-none focus:ring-2 focus:ring-blue-400"
               type="time"
               name="hora"
               required
-              class="focus:outline-none focus:ring-2 focus:ring-blue-500"
             )
-        .mt-6
+
+        div(class="mt-8 flex flex-col md:flex-row justify-between items-center gap-4")
           button(
             type="submit"
-            class="bg-green-500 hover:bg-green-700 text-white font-bold py-2 px-6 rounded transition"
+            class="bg-green-600 hover:bg-green-700 text-white font-bold py-2.5 px-6 rounded-lg transition-all duration-300 shadow-md"
           ) Confirmar Turno
-        .mt-4.flex.justify-end
+
           a(
             href="/admision"
-            class="inline-flex items-center gap-2 border border-gray-400 text-gray-700 hover:bg-gray-100 hover:text-black font-medium py-2 px-4 rounded transition"
+            class="inline-flex items-center gap-2 border border-gray-400 text-gray-700 hover:bg-gray-100 hover:text-black font-medium py-2 px-4 rounded-lg transition"
           )
-            img(src="/images/back.svg" alt="Volver" class="w-8 h-8")
+            img(src="/images/back.svg" alt="Volver" class="w-5 h-5")
             | Volver

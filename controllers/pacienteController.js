@@ -7,6 +7,7 @@ import TipoMutual from '../models/TipoMutual.js';
 import TipoAdmision from '../models/TipoAdmision.js';
 import TipoMotivo from '../models/TipoMotivo.js';
 import { Op } from 'sequelize';
+import Admision from '../models/Admision.js';
 
 async function formulario(req, res) {
     res.render('admision/pacientes/dnipaciente');
@@ -14,8 +15,9 @@ async function formulario(req, res) {
 
 async function buscar(req,res) {
     const {dni} = req.body;
-    if (!dni) {
-        return res.status(400).send('DNI es requerido');
+    if (!dni || dni.length != 8) {
+        req.flash('error', 'Ingrese un DNI valido (8 numeros)');
+        return res.status(400).redirect('/admision/buscar');
     }
     try{
         const pacienteEncontrado = await Paciente.findOne(
@@ -44,11 +46,6 @@ async function formularioNuevo(req, res) {
     const provincias = await Provincia.findAll({ include: [{ model: Localidad, as: 'Localidades' }] });
     const mutuales = await Mutual.findAll({ include: [TipoMutual] });
     const generos = await Genero.findAll();
-    if (!dni || dni.length < 8) {
-        req.flash('error', 'Ingrese un DNI valido');
-        return res.status(400).redirect('/admision/buscar');
-    }
-    req.session.dniPaciente = null; // Limpia el DNI de la sesión después de usarlo
     res.render('admision/pacientes/pacienteNuevo', {
         title: 'Formulario de Admisión',
         dni: dni,
@@ -60,7 +57,13 @@ async function formularioNuevo(req, res) {
 
 async function nuevoPaciente(req, res) {
     const nuevoPaciente = req.body;
-    console.log(nuevoPaciente);
+    const hoy = req.app.locals.formatDate(new Date());
+
+    if (nuevoPaciente.fechaNacimiento > hoy) {
+        req.flash('error', 'La fecha de nacimiento no puede ser mayor al día de hoy');   
+        return res.status(400).redirect('/admision/nuevo-paciente');
+    }
+    req.session.dniPaciente = null; // Limpia el DNI de la sesión después de usarlo
     try {
         const paciente = await Paciente.create({
             dni: nuevoPaciente.dni,
@@ -120,6 +123,19 @@ async function updatePaciente(req,res){
     const paciente = req.body;
     const pacienteAnterior = req.session.pacienteEncontrado;
     delete req.session.pacienteEncontrado;
+    try {
+        const admitido = await Admision.findOne({
+            where: {idPaciente: pacienteAnterior.id}
+        })
+        if (admitido) {
+            req.flash('error','El paciente ya se encuentra admitido');
+            return res.redirect('/admision/paciente');
+        }
+        
+    } catch (error) {
+        console.error('Error al obtener el paciente:', error);
+        res.status(500).send('Error interno del servidor');
+    }
     const cambio =
                 paciente.nombre[0] !== pacienteAnterior.nombre ||
                 paciente.nombre[1] !== pacienteAnterior.apellido ||

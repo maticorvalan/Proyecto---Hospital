@@ -1,10 +1,11 @@
 import express from 'express';
 import admisionController from '../controllers/admisionController.js';
 import pacienteController from '../controllers/pacienteController.js';
+import { ensureAuthenticated } from '../middlewares/authMiddleware.js';
 const router = express.Router();
 
 // Rutas para Admisión
-router.get('/', admisionController.pagina);
+router.get('/', ensureAuthenticated ,admisionController.pagina);
 router.get('/nuevo', admisionController.nueva);
 router.post('/nuevo', admisionController.crear);
 

@@ -2,7 +2,6 @@
 extends ../../layoutEmergencia
 block content
       div(class="bg-white/90 backdrop-blur-lg p-12 md:p-20 rounded-3xl shadow-2xl flex flex-col md:flex-row items-center gap-12 border border-rose-100")
-        // Botón: Registrar Emergencia
         a(href="/admision/emergencia/nueva" class="flex flex-col items-center group")
           button(class="bg-red-600 text-white text-2xl font-semibold py-6 px-10 rounded-2xl shadow-lg hover:bg-red-700 hover:scale-105 hover:shadow-2xl hover:ring-4 hover:ring-red-300 transition-all duration-300 ease-in-out flex items-center gap-4")
             svg(xmlns="http://www.w3.org/2000/svg", fill="none", viewBox="0 0 24 24", stroke="currentColor", class="w-8 h-8")
@@ -10,11 +9,18 @@ block content
             span Registrar Emergencia
           span(class="mt-2 text-sm text-red-700 opacity-0 group-hover:opacity-100 transition-opacity duration-300") Nueva atención
 
-        // Botón: Ver Pacientes
         a(href="/admision/emergencia/pacientes" class="flex flex-col items-center group")
           button(class="bg-blue-600 text-white text-2xl font-semibold py-6 px-10 rounded-2xl shadow-lg hover:bg-blue-700 hover:scale-105 hover:shadow-2xl hover:ring-4 hover:ring-blue-300 transition-all duration-300 ease-in-out flex items-center gap-4")
             svg(xmlns="http://www.w3.org/2000/svg", fill="none", viewBox="0 0 24 24", stroke="currentColor", class="w-8 h-8")
               path(stroke-linecap="round", stroke-linejoin="round", stroke-width="2", d="M17 20h5v-2a3 3 0 00-5.356-1.857M9 20H4v-2a3 3 0 015.356-1.857M15 11a4 4 0 10-8 0 4 4 0 008 0z")
             span Pacientes
           span(class="mt-2 text-sm text-blue-700 opacity-0 group-hover:opacity-100 transition-opacity duration-300") Listado actual
+
+      div(class="mt-8 flex justify-center")
+        a(
+          href="/admision"
+          class="inline-flex items-center gap-2 bg-white border border-gray-400 text-gray-700 hover:bg-gray-200 hover:text-black font-medium py-2 px-4 rounded transition"
+        )
+          img(src="/images/back.svg" alt="Volver" class="w-5 h-5")
+          | Volver  
 
