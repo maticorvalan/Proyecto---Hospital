@@ -62,3 +62,5 @@ models.sequelize.sync({ alter: true })
   .catch((error) => {
     console.error('Error al conectar a la base de datos:', error);
   })
+
+export default app;
