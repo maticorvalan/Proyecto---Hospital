@@ -1,4 +1,5 @@
 import express from 'express';
+import path from 'node:path';
 import models from './models/index.js';
 import session from 'express-session';
 import flash from 'connect-flash';
@@ -12,12 +13,14 @@ const PORT = process.env.PORT;
 import indexRouter from './routes/index.js';
 import admisionRouter from './routes/admision.js';
 import authRouter from './routes/auth.js';
-
+import { fileURLToPath } from 'url';
+const __filename = fileURLToPath(import.meta.url);
+const __dirname = path.dirname(__filename);
 
 app.set('view engine', 'pug');
-app.set('views', './views');
-app.use(express.static('public'));
-app.use("/images", express.static("images"));
+app.set('views', path.join(__dirname, 'views'));
+app.use(express.static(path.join(__dirname, 'public')));
+app.use("/images", express.static(path.join(__dirname,"images")));
 app.use(express.urlencoded({}));
 app.use(express.json());
 // Configuración de la sesión
