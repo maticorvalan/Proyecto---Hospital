@@ -38,12 +38,5 @@ PORT=3000
 Para ejecutarlo utiliza
 npm run dev
 
-7- Crea un usuario en la base de datos
-En la base de datos dirigete a la tabla usuario y ejecuta el siguiente comando SQL
-
-insert into hospitalhis.usuarios (email, nombre,idRolUsuario, password,createdAt,updatedAt ) 
-values(
-"mati@google.com","matias",2,$2a$10$uSpYM.XQXyKjNaWrCC1Xqu1JjONvaWuBjrSA95BsiooKaZ7imgJle,CURRENT_TIMESTAMP(),CURRENT_TIMESTAMP())
-
-8- Inicia sesion
-con el correio mati@google.com y la contraseña: 1234
+7- Inicia sesion
+con el correo mati@gmail.com y la contraseña: 1234
