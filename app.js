@@ -33,7 +33,7 @@ app.use(session({
   resave: false,
   saveUninitialized: true,
   cookie: { secure: false,
-    maxAge: 1000*60*60*24,
+    maxAge: 3600000,
    } // Cambiar a true en producción
 }));
 app.use(flash()); // Configuración de connect-flash para mensajes flash

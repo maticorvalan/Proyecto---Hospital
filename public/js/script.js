@@ -42,9 +42,42 @@ function localidadesPorProvincia() {
   });
 }
 
+function dropdownMenu(){
+  const accountMenuButton = document.getElementById('account-menu-button');
+  const accountMenu = document.getElementById('account-menu');
+  
+  // Alternar el menú desplegable
+  accountMenuButton.addEventListener('click', function() {
+    const isExpanded = accountMenu.classList.toggle('hidden');
+    accountMenuButton.setAttribute('aria-expanded', !isExpanded);
+  });
+  
+  // Cerrar el menú al hacer clic fuera de él
+  document.addEventListener('click', function(event) {
+    if (!accountMenu.contains(event.target) && event.target !== accountMenuButton) {
+      accountMenu.classList.add('hidden');
+      accountMenuButton.setAttribute('aria-expanded', 'false');
+    }
+  });
+  
+  // Acción para el botón de salir
+  const logoutButton = document.getElementById('logout-button');
+  if (logoutButton) {
+    logoutButton.addEventListener('click', function() {
+      // Aquí iría tu lógica para cerrar sesión
+      console.log('Saliendo...');
+      // Por ejemplo: window.location.href = '/logout';
+    });
+  }
+}
+
+
+
+
 
 document.addEventListener('DOMContentLoaded', function() {
   derivadoVisible();              // Habilita o deshabilita el campo de médico derivante
   localidadesPorProvincia();      // Carga las localidades al seleccionar una provincia
+  dropdownMenu();                 // Muestra un submenu en el navbar
 });
 
