@@ -21,6 +21,7 @@ npm install
 4- Configurar la Base de Datos
 Abre tu cliente MySQL y crea una base de datos para el proyecto
 Por ejemplo: CREATE DATABASE hospitalhis;
+y luego importa la base de datos llamada bd.sql
 
 5- Configurar Variables de Entorno
 Crea un archivo llamado .env y copia el siguiente contenido
