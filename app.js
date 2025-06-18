@@ -61,15 +61,19 @@ app.use('/admision', admisionRouter);
 
 
 
-models.sequelize.sync({ force:false })
-  .then(() => {
-    console.log('Conexión a la base de datos establecida correctamente.');
-    app.listen(PORT, () => {
+// models.sequelize.sync({ force:false })
+//   .then(() => {
+//     console.log('Conexión a la base de datos establecida correctamente.');
+//     app.listen(PORT, () => {
+//       console.log(`Servidor escuchando en http://localhost:${PORT}`);
+//     });
+//   })
+//   .catch((error) => {
+//     console.error('Error al conectar a la base de datos:', error);
+//   })
+
+app.listen(PORT, () => {
       console.log(`Servidor escuchando en http://localhost:${PORT}`);
     });
-  })
-  .catch((error) => {
-    console.error('Error al conectar a la base de datos:', error);
-  })
 
 export default app;

@@ -12,9 +12,10 @@ const sequelize = new Sequelize(
     dialect: 'mysql',
     dialectModule: mysql2,
     pool: {
-      max: 3,
+      max: 2,
       min: 0,
-      idle: 10000
+      idle: 10000,
+      acquire: 30000
     },
     logging: false
 });
